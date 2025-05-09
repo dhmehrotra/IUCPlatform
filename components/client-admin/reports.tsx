@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Download, FileText, BarChart, PieChart } from "lucide-react"
+import { FileText, BarChart, PieChart, FileIcon as FilePdf, FileSpreadsheet } from "lucide-react"
+import { Badge } from "@/components/ui/badge"
 
 export function ClientAdminReports() {
   const reports = [
@@ -12,6 +13,7 @@ export function ClientAdminReports() {
       size: "2.4 MB",
       date: "May 1, 2023",
       icon: FileText,
+      preview: "/chart-preview.png",
     },
     {
       id: 2,
@@ -21,6 +23,7 @@ export function ClientAdminReports() {
       size: "4.8 MB",
       date: "April 15, 2023",
       icon: PieChart,
+      preview: "/sustainability-chart.png",
     },
     {
       id: 3,
@@ -30,6 +33,7 @@ export function ClientAdminReports() {
       size: "1.7 MB",
       date: "April 5, 2023",
       icon: BarChart,
+      preview: "/financial-chart.png",
     },
     {
       id: 4,
@@ -39,6 +43,7 @@ export function ClientAdminReports() {
       size: "3.2 MB",
       date: "April 10, 2023",
       icon: FileText,
+      preview: "/performance-metrics.png",
     },
   ]
 
@@ -47,38 +52,58 @@ export function ClientAdminReports() {
       <h1 className="text-2xl font-bold tracking-tight">Reports</h1>
 
       <div className="grid gap-4 md:grid-cols-2">
-        {reports.map((report) => (
-          <Card key={report.id}>
-            <CardHeader className="flex flex-row items-start justify-between space-y-0">
+        {reports.slice(0, 3).map((report) => (
+          <Card key={report.id} className="card-hover rounded-xl shadow-md overflow-hidden">
+            <CardHeader className="flex flex-row items-start justify-between space-y-0 bg-blue-50/50">
               <div>
                 <CardTitle>{report.name}</CardTitle>
                 <CardDescription>{report.description}</CardDescription>
               </div>
-              <report.icon className="h-5 w-5 text-muted-foreground" />
+              <report.icon className="h-5 w-5 text-primary" />
             </CardHeader>
-            <CardContent>
-              <div className="flex items-center justify-between text-sm">
-                <div className="text-muted-foreground">
-                  {report.format} • {report.size} • {report.date}
+            <CardContent className="p-0">
+              <div className="p-4 border-b bg-gray-50">
+                <img
+                  src={report.preview || "/placeholder.svg"}
+                  alt={`Preview of ${report.name}`}
+                  className="w-full h-24 object-cover rounded-md"
+                />
+              </div>
+              <div className="p-4">
+                <div className="flex items-center justify-between text-sm">
+                  <div className="flex items-center space-x-2">
+                    <Badge variant="outline" className="bg-gray-100">
+                      {report.format}
+                    </Badge>
+                    <span className="text-muted-foreground">
+                      {report.size} • {report.date}
+                    </span>
+                  </div>
+                  <div className="flex space-x-2">
+                    <Button variant="outline" size="sm" className="rounded-lg">
+                      <FilePdf className="mr-2 h-4 w-4" />
+                      PDF
+                    </Button>
+                    <Button variant="outline" size="sm" className="rounded-lg">
+                      <FileSpreadsheet className="mr-2 h-4 w-4" />
+                      CSV
+                    </Button>
+                  </div>
                 </div>
-                <Button variant="outline" size="sm">
-                  <Download className="mr-2 h-4 w-4" />
-                  Download
-                </Button>
               </div>
             </CardContent>
           </Card>
         ))}
       </div>
 
-      <Card>
+      <Card className="card-hover rounded-xl shadow-md">
         <CardHeader>
           <CardTitle>Custom Report</CardTitle>
           <CardDescription>Generate a custom report by selecting parameters and date range</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="flex justify-end">
-            <Button>Generate Custom Report</Button>
+            <Button className="rounded-xl">Generate Custom Report</Button>
           </div>
         </CardContent>
       </Card>

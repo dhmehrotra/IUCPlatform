@@ -6,7 +6,17 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
-import { Calendar, Upload, CheckCircle } from "lucide-react"
+import { Calendar, Upload, CheckCircle, AlertTriangle } from "lucide-react"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 export function IUCOpsFirmwareUpdates() {
   const [firmwareVersions, setFirmwareVersions] = useState([
@@ -64,7 +74,7 @@ export function IUCOpsFirmwareUpdates() {
     <div className="space-y-8">
       <h1 className="text-2xl font-bold tracking-tight">Firmware Updates</h1>
 
-      <Card className="card-hover overflow-hidden">
+      <Card className="card-hover overflow-hidden rounded-xl shadow-md">
         <CardHeader className="bg-blue-50/50">
           <CardTitle>Firmware Versions</CardTitle>
           <CardDescription>Manage firmware versions and schedule updates</CardDescription>
@@ -107,10 +117,62 @@ export function IUCOpsFirmwareUpdates() {
                   <TableCell>{firmware.releaseNotes}</TableCell>
                   <TableCell className="text-right">
                     {firmware.deploymentStatus < 100 ? (
-                      <Button size="sm" className="rounded-lg">
-                        <Calendar className="mr-2 h-4 w-4" />
-                        Schedule Update
-                      </Button>
+                      <Dialog>
+                        <DialogTrigger asChild>
+                          <Button size="sm" className="rounded-lg">
+                            <Calendar className="mr-2 h-4 w-4" />
+                            Schedule Update
+                          </Button>
+                        </DialogTrigger>
+                        <DialogContent className="sm:max-w-[425px] rounded-xl">
+                          <DialogHeader>
+                            <DialogTitle>Schedule Firmware Update</DialogTitle>
+                            <DialogDescription>
+                              Schedule a firmware update for {firmware.model} to version {firmware.version}
+                            </DialogDescription>
+                          </DialogHeader>
+                          <div className="grid gap-4 py-4">
+                            <div className="space-y-2">
+                              <h4 className="font-medium">Select Stations</h4>
+                              <Select>
+                                <SelectTrigger className="w-full rounded-lg">
+                                  <SelectValue placeholder="Select stations to update" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  <SelectItem value="all">All {firmware.model} Stations</SelectItem>
+                                  <SelectItem value="pending">Pending Stations Only</SelectItem>
+                                  <SelectItem value="custom">Custom Selection</SelectItem>
+                                </SelectContent>
+                              </Select>
+                            </div>
+                            <div className="space-y-2">
+                              <h4 className="font-medium">Update Time</h4>
+                              <Select defaultValue="off-peak">
+                                <SelectTrigger className="w-full rounded-lg">
+                                  <SelectValue placeholder="Select update time" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  <SelectItem value="immediate">Immediate</SelectItem>
+                                  <SelectItem value="off-peak">Off-Peak Hours (Recommended)</SelectItem>
+                                  <SelectItem value="scheduled">Custom Schedule</SelectItem>
+                                </SelectContent>
+                              </Select>
+                            </div>
+                            <div className="flex items-center space-x-2 pt-2">
+                              <AlertTriangle className="h-5 w-5 text-warning" />
+                              <p className="text-sm text-muted-foreground">
+                                Stations will be unavailable during the update process (approx. 5-10 minutes)
+                              </p>
+                            </div>
+                          </div>
+                          <DialogFooter>
+                            <Button variant="outline" className="rounded-lg">
+                              Cancel
+                            </Button>
+                            <Button className="rounded-lg">Schedule Update</Button>
+                          </DialogFooter>
+                        </DialogContent>
+                      </Dialog>
                     ) : (
                       <Badge variant="outline" className="bg-success/20 text-success border-success/30">
                         <CheckCircle className="mr-1 h-3 w-3" />
@@ -125,7 +187,7 @@ export function IUCOpsFirmwareUpdates() {
         </CardContent>
       </Card>
 
-      <Card className="card-hover overflow-hidden">
+      <Card className="card-hover overflow-hidden rounded-xl shadow-md">
         <CardHeader className="bg-blue-50/50">
           <CardTitle>Upload New Firmware</CardTitle>
           <CardDescription>Upload a new firmware version for deployment</CardDescription>

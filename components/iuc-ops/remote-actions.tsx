@@ -6,8 +6,9 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
-import { AlertCircle, Terminal, RefreshCw, Lock, Settings, CheckCircle, XCircle, Clock } from "lucide-react"
+import { AlertCircle, Terminal, RefreshCw, Lock, Settings, CheckCircle, XCircle, Clock, ToggleLeft } from "lucide-react"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 export function IUCOpsRemoteActions() {
   const [selectedStation, setSelectedStation] = useState<string>("")
@@ -40,7 +41,7 @@ export function IUCOpsRemoteActions() {
     <div className="space-y-8">
       <h1 className="text-2xl font-bold tracking-tight">Remote Actions</h1>
 
-      <Card className="card-hover overflow-hidden">
+      <Card className="card-hover overflow-hidden rounded-xl shadow-md">
         <CardHeader className="bg-blue-50/50">
           <CardTitle>Execute Remote Command</CardTitle>
           <CardDescription>Select a station and command to execute remotely</CardDescription>
@@ -67,48 +68,88 @@ export function IUCOpsRemoteActions() {
             </Select>
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="action" className="text-base">
-              Remote Action
-            </Label>
-            <Select value={selectedAction} onValueChange={setSelectedAction}>
-              <SelectTrigger id="action" className="h-12 rounded-xl">
-                <SelectValue placeholder="Select action" />
-              </SelectTrigger>
-              <SelectContent className="rounded-xl">
-                <SelectItem value="reboot">
-                  <div className="flex items-center">
-                    <RefreshCw className="mr-2 h-5 w-5 text-primary" />
-                    Reboot Station
-                  </div>
-                </SelectItem>
-                <SelectItem value="lock-connector">
-                  <div className="flex items-center">
-                    <Lock className="mr-2 h-5 w-5 text-warning" />
-                    Lock Connector
-                  </div>
-                </SelectItem>
-                <SelectItem value="unlock-connector">
-                  <div className="flex items-center">
-                    <Lock className="mr-2 h-5 w-5 text-warning" />
-                    Unlock Connector
-                  </div>
-                </SelectItem>
-                <SelectItem value="push-config">
-                  <div className="flex items-center">
-                    <Settings className="mr-2 h-5 w-5 text-primary" />
-                    Push Configuration
-                  </div>
-                </SelectItem>
-                <SelectItem value="diagnostics">
-                  <div className="flex items-center">
-                    <Terminal className="mr-2 h-5 w-5 text-destructive" />
-                    Run Diagnostics
-                  </div>
-                </SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
+          <Tabs defaultValue="actions" className="w-full">
+            <TabsList className="grid grid-cols-3 mb-4">
+              <TabsTrigger value="actions">Common Actions</TabsTrigger>
+              <TabsTrigger value="firmware">Firmware</TabsTrigger>
+              <TabsTrigger value="settings">Settings</TabsTrigger>
+            </TabsList>
+            <TabsContent value="actions" className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <Button
+                  variant="outline"
+                  className="h-auto py-4 rounded-xl flex flex-col items-center justify-center gap-2"
+                  onClick={() => setSelectedAction("reboot")}
+                  disabled={!selectedStation}
+                >
+                  <RefreshCw className="h-8 w-8 text-primary" />
+                  <span>Restart Station</span>
+                </Button>
+                <Button
+                  variant="outline"
+                  className="h-auto py-4 rounded-xl flex flex-col items-center justify-center gap-2"
+                  onClick={() => setSelectedAction("lock-connector")}
+                  disabled={!selectedStation}
+                >
+                  <Lock className="h-8 w-8 text-warning" />
+                  <span>Lock Connector</span>
+                </Button>
+                <Button
+                  variant="outline"
+                  className="h-auto py-4 rounded-xl flex flex-col items-center justify-center gap-2"
+                  onClick={() => setSelectedAction("toggle-mode")}
+                  disabled={!selectedStation}
+                >
+                  <ToggleLeft className="h-8 w-8 text-success" />
+                  <span>Toggle Public/Private</span>
+                </Button>
+              </div>
+            </TabsContent>
+            <TabsContent value="firmware" className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <Button
+                  variant="outline"
+                  className="h-auto py-4 rounded-xl flex flex-col items-center justify-center gap-2"
+                  onClick={() => setSelectedAction("push-firmware")}
+                  disabled={!selectedStation}
+                >
+                  <Settings className="h-8 w-8 text-primary" />
+                  <span>Push Firmware</span>
+                </Button>
+                <Button
+                  variant="outline"
+                  className="h-auto py-4 rounded-xl flex flex-col items-center justify-center gap-2"
+                  onClick={() => setSelectedAction("diagnostics")}
+                  disabled={!selectedStation}
+                >
+                  <Terminal className="h-8 w-8 text-destructive" />
+                  <span>Run Diagnostics</span>
+                </Button>
+              </div>
+            </TabsContent>
+            <TabsContent value="settings" className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <Button
+                  variant="outline"
+                  className="h-auto py-4 rounded-xl flex flex-col items-center justify-center gap-2"
+                  onClick={() => setSelectedAction("push-config")}
+                  disabled={!selectedStation}
+                >
+                  <Settings className="h-8 w-8 text-primary" />
+                  <span>Push Configuration</span>
+                </Button>
+                <Button
+                  variant="outline"
+                  className="h-auto py-4 rounded-xl flex flex-col items-center justify-center gap-2"
+                  onClick={() => setSelectedAction("reset-settings")}
+                  disabled={!selectedStation}
+                >
+                  <RefreshCw className="h-8 w-8 text-warning" />
+                  <span>Reset Settings</span>
+                </Button>
+              </div>
+            </TabsContent>
+          </Tabs>
 
           <div className="space-y-2">
             <Label htmlFor="notes" className="text-base">
@@ -143,7 +184,7 @@ export function IUCOpsRemoteActions() {
         </CardFooter>
       </Card>
 
-      <Card className="card-hover overflow-hidden">
+      <Card className="card-hover overflow-hidden rounded-xl shadow-md">
         <CardHeader className="bg-blue-50/50">
           <CardTitle>Recent Actions</CardTitle>
           <CardDescription>History of recently executed remote actions</CardDescription>

@@ -91,7 +91,7 @@
   }
 }
 
-/* Custom animations */
+/* Update the custom animations section with more modern animations */
 @keyframes pulse {
   0%,
   100% {
@@ -122,6 +122,15 @@
   }
 }
 
+@keyframes progress {
+  0% {
+    width: 0%;
+  }
+  100% {
+    width: 100%;
+  }
+}
+
 .animate-pulse-slow {
   animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
@@ -132,6 +141,10 @@
 
 .animate-glow {
   animation: glow 2s ease-in-out infinite;
+}
+
+.animate-progress {
+  animation: progress 30s linear forwards;
 }
 
 /* Custom utility classes */
@@ -154,12 +167,37 @@
 /* Fix: Use direct CSS properties instead of @apply for custom colors */
 .status-dot-success {
   background-color: hsl(var(--success));
+  box-shadow: 0 0 5px hsl(var(--success));
 }
 
 .status-dot-warning {
   background-color: hsl(var(--warning));
+  box-shadow: 0 0 5px hsl(var(--warning));
 }
 
 .status-dot-error {
   background-color: hsl(var(--destructive));
+  box-shadow: 0 0 5px hsl(var(--destructive));
+}
+
+/* Add gradient backgrounds */
+.bg-gradient-blue {
+  background: linear-gradient(135deg, #1e5eff 0%, #56ccf2 100%);
+}
+
+.bg-gradient-green {
+  background: linear-gradient(135deg, #00c48c 0%, #27ae60 100%);
+}
+
+.bg-gradient-amber {
+  background: linear-gradient(135deg, #f2994a 0%, #f2c94c 100%);
+}
+
+.bg-gradient-purple {
+  background: linear-gradient(135deg, #9b51e0 0%, #6b3fa0 100%);
+}
+
+/* Chart styles */
+.area-chart-gradient {
+  fill: url(#areaGradient);
 }

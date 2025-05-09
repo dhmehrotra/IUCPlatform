@@ -12,6 +12,7 @@ import {
   AlertTriangle,
   Terminal,
   Download,
+  Handshake,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 
@@ -28,6 +29,7 @@ export function Sidebar({ role, activeItem, onItemSelect }: SidebarProps) {
     { id: "users", label: "Users", icon: Users },
     { id: "pricing", label: "Pricing", icon: PriceTag },
     { id: "reports", label: "Reports", icon: FileText },
+    { id: "partners", label: "Partners", icon: Handshake },
     { id: "settings", label: "Settings", icon: Settings },
   ]
 

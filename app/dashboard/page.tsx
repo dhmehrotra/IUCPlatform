@@ -16,6 +16,8 @@ import { IUCOpsIncidentTracker } from "@/components/iuc-ops/incident-tracker"
 import { IUCOpsRemoteActions } from "@/components/iuc-ops/remote-actions"
 import { IUCOpsFirmwareUpdates } from "@/components/iuc-ops/firmware-updates"
 import { DriverInterface } from "@/components/driver/interface"
+// Add the import for the Partners component
+import { ClientAdminPartners } from "@/components/client-admin/partners"
 
 export type UserRole = "client-admin" | "iuc-ops" | "driver"
 export type SidebarItem =
@@ -84,6 +86,8 @@ export default function DashboardPage() {
             {role === "client-admin" && activeItem === "pricing" && <ClientAdminPricing />}
             {role === "client-admin" && activeItem === "reports" && <ClientAdminReports />}
             {role === "client-admin" && activeItem === "settings" && <ClientAdminSettings />}
+            {/* Then in the return statement, add this line with the other Client Admin Views: */}
+            {role === "client-admin" && activeItem === "partners" && <ClientAdminPartners />}
 
             {/* IUC Ops Views */}
             {role === "iuc-ops" && activeItem === "network-monitor" && <IUCOpsNetworkMonitor />}

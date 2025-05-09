@@ -7,17 +7,22 @@ import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Switch } from "@/components/ui/switch"
+import { Textarea } from "@/components/ui/textarea"
 
 export function ClientAdminSettings() {
   const [settings, setSettings] = useState({
     siteName: "Westside Corporate Park",
     timezone: "America/Los_Angeles",
+    address: "123 Corporate Drive, San Francisco, CA 94105",
+    contactEmail: "admin@westsidecorp.com",
+    contactPhone: "(415) 555-1234",
     notifications: {
       email: true,
       sms: false,
       stationOffline: true,
       lowUtilization: true,
       maintenanceRequired: true,
+      sustainabilityReport: true,
     },
   })
 
@@ -42,8 +47,8 @@ export function ClientAdminSettings() {
     <div className="space-y-6">
       <h1 className="text-2xl font-bold tracking-tight">Settings</h1>
 
-      <Card>
-        <CardHeader>
+      <Card className="card-hover rounded-xl shadow-md overflow-hidden">
+        <CardHeader className="bg-blue-50/50">
           <CardTitle>Organization Settings</CardTitle>
           <CardDescription>Configure your organization's basic information</CardDescription>
         </CardHeader>
@@ -54,13 +59,48 @@ export function ClientAdminSettings() {
               id="site-name"
               value={settings.siteName}
               onChange={(e) => handleInputChange("siteName", e.target.value)}
+              className="rounded-lg"
             />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="address">Address</Label>
+            <Textarea
+              id="address"
+              value={settings.address}
+              onChange={(e) => handleInputChange("address", e.target.value)}
+              className="rounded-lg"
+              rows={2}
+            />
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="contact-email">Contact Email</Label>
+              <Input
+                id="contact-email"
+                type="email"
+                value={settings.contactEmail}
+                onChange={(e) => handleInputChange("contactEmail", e.target.value)}
+                className="rounded-lg"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="contact-phone">Contact Phone</Label>
+              <Input
+                id="contact-phone"
+                value={settings.contactPhone}
+                onChange={(e) => handleInputChange("contactPhone", e.target.value)}
+                className="rounded-lg"
+              />
+            </div>
           </div>
 
           <div className="space-y-2">
             <Label htmlFor="timezone">Timezone</Label>
             <Select value={settings.timezone} onValueChange={(value) => handleInputChange("timezone", value)}>
-              <SelectTrigger id="timezone">
+              <SelectTrigger id="timezone" className="rounded-lg">
                 <SelectValue placeholder="Select timezone" />
               </SelectTrigger>
               <SelectContent>
@@ -75,12 +115,12 @@ export function ClientAdminSettings() {
           </div>
         </CardContent>
         <CardFooter>
-          <Button>Save Changes</Button>
+          <Button className="rounded-xl">Save Changes</Button>
         </CardFooter>
       </Card>
 
-      <Card>
-        <CardHeader>
+      <Card className="card-hover rounded-xl shadow-md overflow-hidden">
+        <CardHeader className="bg-blue-50/50">
           <CardTitle>Notification Preferences</CardTitle>
           <CardDescription>Configure how and when you receive notifications</CardDescription>
         </CardHeader>
@@ -134,11 +174,23 @@ export function ClientAdminSettings() {
                   onCheckedChange={(checked) => handleNotificationChange("maintenanceRequired", checked)}
                 />
               </div>
+
+              <div className="flex items-center justify-between">
+                <div>
+                  <Label htmlFor="sustainability-report">Receive monthly sustainability report (email)</Label>
+                  <p className="text-xs text-gray-500">Monthly report on carbon offset and environmental impact</p>
+                </div>
+                <Switch
+                  id="sustainability-report"
+                  checked={settings.notifications.sustainabilityReport}
+                  onCheckedChange={(checked) => handleNotificationChange("sustainabilityReport", checked)}
+                />
+              </div>
             </div>
           </div>
         </CardContent>
         <CardFooter>
-          <Button>Save Notification Settings</Button>
+          <Button className="rounded-xl">Save Notification Settings</Button>
         </CardFooter>
       </Card>
     </div>

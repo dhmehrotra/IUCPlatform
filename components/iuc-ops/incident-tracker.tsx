@@ -1,10 +1,17 @@
+"use client"
+
+import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"
-import { Plus, Filter, AlertTriangle, Zap, CreditCard, Lock } from "lucide-react"
+import { Plus, Filter } from "lucide-react"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 export function IUCOpsIncidentTracker() {
+  const [activeTab, setActiveTab] = useState("all")
+
   const incidents = [
     {
       id: "INC-1042",
@@ -16,6 +23,7 @@ export function IUCOpsIncidentTracker() {
       assignedTo: "Alex Johnson",
       created: "Today, 10:23 AM",
       type: "connection",
+      emoji: "📡",
     },
     {
       id: "INC-1041",
@@ -27,6 +35,7 @@ export function IUCOpsIncidentTracker() {
       assignedTo: "Maria Garcia",
       created: "Today, 9:15 AM",
       type: "payment",
+      emoji: "💳",
     },
     {
       id: "INC-1040",
@@ -38,6 +47,7 @@ export function IUCOpsIncidentTracker() {
       assignedTo: "James Wilson",
       created: "Yesterday, 4:30 PM",
       type: "hardware",
+      emoji: "🔌",
     },
     {
       id: "INC-1039",
@@ -49,6 +59,7 @@ export function IUCOpsIncidentTracker() {
       assignedTo: "Sarah Chen",
       created: "Yesterday, 2:45 PM",
       type: "hardware",
+      emoji: "🖥️",
     },
     {
       id: "INC-1038",
@@ -60,6 +71,7 @@ export function IUCOpsIncidentTracker() {
       assignedTo: "Alex Johnson",
       created: "2 days ago",
       type: "hardware",
+      emoji: "🔥",
     },
     {
       id: "INC-1037",
@@ -71,21 +83,21 @@ export function IUCOpsIncidentTracker() {
       assignedTo: "Maria Garcia",
       created: "2 days ago",
       type: "connection",
+      emoji: "📡",
     },
   ]
 
-  const getIncidentIcon = (type: string) => {
-    switch (type) {
-      case "connection":
-        return <Zap className="h-5 w-5 text-primary" />
-      case "payment":
-        return <CreditCard className="h-5 w-5 text-warning" />
-      case "hardware":
-        return <AlertTriangle className="h-5 w-5 text-destructive" />
-      default:
-        return <Lock className="h-5 w-5 text-muted-foreground" />
-    }
-  }
+  const filteredIncidents =
+    activeTab === "all"
+      ? incidents
+      : incidents.filter((incident) => {
+          if (activeTab === "open") return incident.status === "Open"
+          if (activeTab === "critical") return incident.priority === "High"
+          if (activeTab === "resolved") return incident.status === "Resolved"
+          return true
+        })
+
+  const technicians = ["Alex Johnson", "Maria Garcia", "James Wilson", "Sarah Chen", "David Kim", "Lisa Patel"]
 
   return (
     <div className="space-y-8">
@@ -103,9 +115,17 @@ export function IUCOpsIncidentTracker() {
         </div>
       </div>
 
-      <Card className="card-hover overflow-hidden">
+      <Card className="card-hover overflow-hidden rounded-xl shadow-md">
         <CardHeader className="bg-blue-50/50">
           <CardTitle>Active Incidents</CardTitle>
+          <Tabs defaultValue="all" className="mt-4" value={activeTab} onValueChange={setActiveTab}>
+            <TabsList className="grid grid-cols-4 w-full max-w-md">
+              <TabsTrigger value="all">All</TabsTrigger>
+              <TabsTrigger value="open">Open</TabsTrigger>
+              <TabsTrigger value="critical">Critical</TabsTrigger>
+              <TabsTrigger value="resolved">Resolved</TabsTrigger>
+            </TabsList>
+          </Tabs>
         </CardHeader>
         <CardContent className="p-0">
           <Table>
@@ -119,15 +139,18 @@ export function IUCOpsIncidentTracker() {
                 <TableHead>Status</TableHead>
                 <TableHead>Assigned To</TableHead>
                 <TableHead>Created</TableHead>
+                <TableHead className="w-[150px]">Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {incidents.map((incident) => (
+              {filteredIncidents.map((incident) => (
                 <TableRow key={incident.id} className="transition-colors hover:bg-gray-50">
                   <TableCell className="font-medium text-primary">{incident.id}</TableCell>
                   <TableCell>
                     <div className="flex items-center gap-2">
-                      {getIncidentIcon(incident.type)}
+                      <span className="text-lg" role="img" aria-label={incident.type}>
+                        {incident.emoji}
+                      </span>
                       <span>{incident.description}</span>
                     </div>
                   </TableCell>
@@ -173,6 +196,22 @@ export function IUCOpsIncidentTracker() {
                     </div>
                   </TableCell>
                   <TableCell>{incident.created}</TableCell>
+                  <TableCell>
+                    <div className="flex items-center gap-2">
+                      <Select defaultValue={incident.assignedTo}>
+                        <SelectTrigger className="w-[140px] h-8 text-xs rounded-lg">
+                          <SelectValue placeholder="Assign Technician" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {technicians.map((tech) => (
+                            <SelectItem key={tech} value={tech}>
+                              {tech}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>

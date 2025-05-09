@@ -2,13 +2,20 @@
 
 import type React from "react"
 import Image from "next/image"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Progress } from "@/components/ui/progress"
 import { Zap, CreditCard, QrCode, Clock, Battery, CheckCircle } from "lucide-react"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog"
 
 // Circular progress component
 function CircularProgress({
@@ -56,12 +63,14 @@ function CircularProgress({
 export function DriverInterface() {
   const [step, setStep] = useState<"scan" | "details" | "charging" | "receipt">("scan")
   const [stationId, setStationId] = useState("")
+  const [showReceipt, setShowReceipt] = useState(false)
   const [chargingData, setChargingData] = useState({
     kwhDelivered: 0,
     timeElapsed: 0,
     cost: 0,
     rate: 0.25,
   })
+  const progressRef = useRef<HTMLDivElement>(null)
 
   const handleStationIdSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -77,6 +86,7 @@ export function DriverInterface() {
 
   const endCharging = () => {
     setStep("receipt")
+    setShowReceipt(true)
   }
 
   // Simulate charging progress
@@ -99,13 +109,20 @@ export function DriverInterface() {
     }
   }, [step])
 
+  // Animate progress bar
+  useEffect(() => {
+    if (step === "charging" && progressRef.current) {
+      progressRef.current.classList.add("animate-progress")
+    }
+  }, [step])
+
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-50 p-6">
-      <Card className="w-full max-w-md card-hover shadow-lg">
+      <Card className="w-full max-w-md card-hover shadow-lg rounded-xl overflow-hidden">
         <CardHeader className="text-center bg-blue-50/50 pb-6">
           <div className="flex justify-center mb-2">
             <Image
-              src="/images/iuc-logo.png"
+              src="/images/iuc-logo-blue.png"
               alt="IUC Platform Logo"
               width={160}
               height={45}
@@ -206,7 +223,13 @@ export function DriverInterface() {
                 <Battery className="h-20 w-20 text-success animate-pulse" />
               </div>
 
-              <Progress value={(chargingData.kwhDelivered / 50) * 100} className="h-3 rounded-lg" />
+              <div className="relative h-3 rounded-lg bg-gray-200 overflow-hidden">
+                <div
+                  ref={progressRef}
+                  className="absolute top-0 left-0 h-full bg-gradient-to-r from-primary to-success rounded-lg"
+                  style={{ width: "0%" }}
+                ></div>
+              </div>
 
               <div className="grid grid-cols-3 gap-6 text-center">
                 <div className="flex flex-col items-center">
@@ -315,6 +338,65 @@ export function DriverInterface() {
           )}
         </CardFooter>
       </Card>
+
+      {/* Receipt Modal */}
+      <Dialog open={showReceipt} onOpenChange={setShowReceipt}>
+        <DialogContent className="sm:max-w-md rounded-xl">
+          <DialogHeader>
+            <DialogTitle>Charging Receipt</DialogTitle>
+            <DialogDescription>Your charging session has been completed successfully.</DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="flex justify-center mb-4">
+              <div className="bg-success/20 p-3 rounded-full">
+                <CheckCircle className="h-10 w-10 text-success" />
+              </div>
+            </div>
+
+            <div className="space-y-3">
+              <div className="flex justify-between">
+                <span className="text-muted-foreground">Station:</span>
+                <span className="font-medium">STN-005 (Downtown Plaza)</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-muted-foreground">Energy:</span>
+                <span className="font-medium">{chargingData.kwhDelivered.toFixed(2)} kWh</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-muted-foreground">Duration:</span>
+                <span className="font-medium">
+                  {Math.floor(chargingData.timeElapsed / 60)}:
+                  {(chargingData.timeElapsed % 60).toString().padStart(2, "0")}
+                </span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-muted-foreground">Rate:</span>
+                <span className="font-medium">${chargingData.rate.toFixed(2)}/kWh</span>
+              </div>
+              <div className="border-t pt-3 mt-3">
+                <div className="flex justify-between">
+                  <span className="font-bold">Total:</span>
+                  <span className="font-bold text-primary">${chargingData.cost.toFixed(2)}</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-success/10 p-3 rounded-lg flex items-center justify-center">
+              <CreditCard className="h-5 w-5 text-success mr-2" />
+              <span className="text-success">Payment processed successfully</span>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" className="rounded-lg" onClick={() => setShowReceipt(false)}>
+              Close
+            </Button>
+            <Button className="rounded-lg">
+              <Clock className="mr-2 h-4 w-4" />
+              Start New Session
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }

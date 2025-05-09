@@ -12,3 +12,4 @@ export type SidebarItem =
   | "remote-actions"
   | "firmware-updates"
   | "driver-interface"
+  | "partners"

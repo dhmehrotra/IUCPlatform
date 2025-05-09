@@ -1,7 +1,6 @@
 import { Button } from "@/components/ui/button"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { MoreHorizontal, Plus } from "lucide-react"
+import { Plus, Calendar, EyeIcon, PowerOff } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 
 export function ClientAdminStations() {
@@ -12,6 +11,8 @@ export function ClientAdminStations() {
       status: "Online",
       usage: "92%",
       lastFault: "None",
+      powerOutput: "75 kW",
+      health: "Good",
     },
     {
       id: "STN-002",
@@ -19,6 +20,8 @@ export function ClientAdminStations() {
       status: "Online",
       usage: "78%",
       lastFault: "None",
+      powerOutput: "75 kW",
+      health: "Good",
     },
     {
       id: "STN-003",
@@ -26,6 +29,8 @@ export function ClientAdminStations() {
       status: "Online",
       usage: "87%",
       lastFault: "None",
+      powerOutput: "150 kW",
+      health: "Good",
     },
     {
       id: "STN-004",
@@ -33,6 +38,8 @@ export function ClientAdminStations() {
       status: "Offline",
       usage: "0%",
       lastFault: "Communication Error (4h ago)",
+      powerOutput: "0 kW",
+      health: "Critical",
     },
     {
       id: "STN-005",
@@ -40,6 +47,8 @@ export function ClientAdminStations() {
       status: "Online",
       usage: "81%",
       lastFault: "None",
+      powerOutput: "150 kW",
+      health: "Good",
     },
     {
       id: "STN-006",
@@ -47,6 +56,8 @@ export function ClientAdminStations() {
       status: "Maintenance",
       usage: "0%",
       lastFault: "Scheduled Maintenance",
+      powerOutput: "0 kW",
+      health: "Warning",
     },
     {
       id: "STN-007",
@@ -54,6 +65,8 @@ export function ClientAdminStations() {
       status: "Online",
       usage: "45%",
       lastFault: "Connector Error (2d ago)",
+      powerOutput: "50 kW",
+      health: "Warning",
     },
   ]
 
@@ -61,27 +74,29 @@ export function ClientAdminStations() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold tracking-tight">Charging Stations</h1>
-        <Button>
+        <Button className="rounded-xl">
           <Plus className="mr-2 h-4 w-4" />
           Add Station
         </Button>
       </div>
 
-      <div className="rounded-md border">
+      <div className="rounded-xl border shadow-md overflow-hidden">
         <Table>
           <TableHeader>
             <TableRow>
               <TableHead>Station ID</TableHead>
               <TableHead>Location</TableHead>
               <TableHead>Status</TableHead>
+              <TableHead>Health</TableHead>
+              <TableHead>Power Output</TableHead>
               <TableHead>Usage %</TableHead>
               <TableHead>Last Fault</TableHead>
-              <TableHead className="w-[80px]">Actions</TableHead>
+              <TableHead className="w-[120px]">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {stations.map((station) => (
-              <TableRow key={station.id}>
+              <TableRow key={station.id} className="hover:bg-gray-50">
                 <TableCell className="font-medium">{station.id}</TableCell>
                 <TableCell>{station.location}</TableCell>
                 <TableCell>
@@ -93,22 +108,35 @@ export function ClientAdminStations() {
                     {station.status}
                   </Badge>
                 </TableCell>
+                <TableCell>
+                  <div className="flex items-center">
+                    <span
+                      className={
+                        station.health === "Good"
+                          ? "status-dot-success"
+                          : station.health === "Warning"
+                            ? "status-dot-warning"
+                            : "status-dot-error"
+                      }
+                    ></span>
+                    {station.health}
+                  </div>
+                </TableCell>
+                <TableCell>{station.powerOutput}</TableCell>
                 <TableCell>{station.usage}</TableCell>
                 <TableCell>{station.lastFault}</TableCell>
                 <TableCell>
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button variant="ghost" className="h-8 w-8 p-0">
-                        <span className="sr-only">Open menu</span>
-                        <MoreHorizontal className="h-4 w-4" />
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                      <DropdownMenuItem>View</DropdownMenuItem>
-                      <DropdownMenuItem>Edit</DropdownMenuItem>
-                      <DropdownMenuItem>Disable</DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
+                  <div className="flex space-x-1">
+                    <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full" title="View Details">
+                      <EyeIcon className="h-4 w-4" />
+                    </Button>
+                    <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full" title="Disable Station">
+                      <PowerOff className="h-4 w-4" />
+                    </Button>
+                    <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full" title="Schedule Maintenance">
+                      <Calendar className="h-4 w-4" />
+                    </Button>
+                  </div>
                 </TableCell>
               </TableRow>
             ))}
