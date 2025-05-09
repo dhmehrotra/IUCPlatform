@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation"
 import Image from "next/image"
+import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { ArrowRight, Settings, BarChart3, Zap, Leaf } from "lucide-react"
@@ -12,7 +13,8 @@ export function HomePage() {
   const personaSectionRef = useRef<HTMLDivElement>(null)
 
   const navigateToDashboard = (persona: string) => {
-    router.push(`/dashboard?persona=${persona}`)
+    // Use window.location.href to ensure a full page navigation
+    window.location.href = `/dashboard?persona=${persona}`
   }
 
   const scrollToPersonaSection = () => {
@@ -26,7 +28,7 @@ export function HomePage() {
         <div className="container mx-auto flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
           <div className="flex items-center">
             <Image
-              src="/images/iuc-logo.png"
+              src="/images/iuc-logo-blue.png"
               alt="IUC Platform Logo"
               width={180}
               height={50}
@@ -52,27 +54,21 @@ export function HomePage() {
               Monetize.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button
-                size="lg"
-                className="rounded-xl text-lg h-14 px-8 shadow-md hover:shadow-xl transition-all"
-                onClick={() => navigateToDashboard("client-admin")}
-              >
-                🔐 Enter as Client Admin
-              </Button>
-              <Button
-                size="lg"
-                className="rounded-xl text-lg h-14 px-8 shadow-md hover:shadow-xl transition-all"
-                onClick={() => navigateToDashboard("iuc-ops")}
-              >
-                🛠 Enter as IUC Ops
-              </Button>
-              <Button
-                size="lg"
-                className="rounded-xl text-lg h-14 px-8 shadow-md hover:shadow-xl transition-all"
-                onClick={() => navigateToDashboard("driver")}
-              >
-                🚗 Enter as Driver
-              </Button>
+              <Link href="/dashboard?persona=client-admin" passHref>
+                <Button size="lg" className="rounded-xl text-lg h-14 px-8 shadow-md hover:shadow-xl transition-all">
+                  🔐 Enter as Client Admin
+                </Button>
+              </Link>
+              <Link href="/dashboard?persona=iuc-ops" passHref>
+                <Button size="lg" className="rounded-xl text-lg h-14 px-8 shadow-md hover:shadow-xl transition-all">
+                  🛠 Enter as IUC Ops
+                </Button>
+              </Link>
+              <Link href="/dashboard?persona=driver" passHref>
+                <Button size="lg" className="rounded-xl text-lg h-14 px-8 shadow-md hover:shadow-xl transition-all">
+                  🚗 Enter as Driver
+                </Button>
+              </Link>
             </div>
           </div>
         </section>
@@ -151,86 +147,76 @@ export function HomePage() {
             <h2 className="text-3xl font-bold text-center mb-12">Choose How You'd Like to Enter</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {/* Client Admin Card */}
-              <Card
-                className="card-hover cursor-pointer overflow-hidden"
-                onClick={() => navigateToDashboard("client-admin")}
-              >
-                <div className="h-3 bg-primary w-full"></div>
-                <CardHeader className="pt-8">
-                  <div className="mb-4 flex items-center justify-center">
-                    <div className="w-16 h-16 rounded-full bg-blue-100 flex items-center justify-center">
-                      <span className="text-3xl">🏢</span>
+              <Link href="/dashboard?persona=client-admin" passHref className="block">
+                <Card className="card-hover cursor-pointer overflow-hidden h-full">
+                  <div className="h-3 bg-primary w-full"></div>
+                  <CardHeader className="pt-8">
+                    <div className="mb-4 flex items-center justify-center">
+                      <div className="w-16 h-16 rounded-full bg-blue-100 flex items-center justify-center">
+                        <span className="text-3xl">🏢</span>
+                      </div>
                     </div>
-                  </div>
-                  <CardTitle className="text-center text-2xl">Client Admin Portal</CardTitle>
-                  <CardDescription className="text-center">
-                    View usage, manage pricing, download reports
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="flex justify-center pb-8">
-                  <Button
-                    variant="outline"
-                    className="rounded-full group"
-                    onClick={() => navigateToDashboard("client-admin")}
-                  >
-                    Enter Portal
-                    <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-                  </Button>
-                </CardContent>
-              </Card>
+                    <CardTitle className="text-center text-2xl">Client Admin Portal</CardTitle>
+                    <CardDescription className="text-center">
+                      View usage, manage pricing, download reports
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="flex justify-center pb-8">
+                    <Button variant="outline" className="rounded-full group">
+                      Enter Portal
+                      <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                    </Button>
+                  </CardContent>
+                </Card>
+              </Link>
 
               {/* IUC Ops Card */}
-              <Card
-                className="card-hover cursor-pointer overflow-hidden"
-                onClick={() => navigateToDashboard("iuc-ops")}
-              >
-                <div className="h-3 bg-warning w-full"></div>
-                <CardHeader className="pt-8">
-                  <div className="mb-4 flex items-center justify-center">
-                    <div className="w-16 h-16 rounded-full bg-amber-100 flex items-center justify-center">
-                      <span className="text-3xl">🛠</span>
+              <Link href="/dashboard?persona=iuc-ops" passHref className="block">
+                <Card className="card-hover cursor-pointer overflow-hidden h-full">
+                  <div className="h-3 bg-warning w-full"></div>
+                  <CardHeader className="pt-8">
+                    <div className="mb-4 flex items-center justify-center">
+                      <div className="w-16 h-16 rounded-full bg-amber-100 flex items-center justify-center">
+                        <span className="text-3xl">🛠</span>
+                      </div>
                     </div>
-                  </div>
-                  <CardTitle className="text-center text-2xl">IUC Ops Portal</CardTitle>
-                  <CardDescription className="text-center">
-                    Monitor health, push firmware, handle incidents
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="flex justify-center pb-8">
-                  <Button
-                    variant="outline"
-                    className="rounded-full group"
-                    onClick={() => navigateToDashboard("iuc-ops")}
-                  >
-                    Enter Portal
-                    <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-                  </Button>
-                </CardContent>
-              </Card>
+                    <CardTitle className="text-center text-2xl">IUC Ops Portal</CardTitle>
+                    <CardDescription className="text-center">
+                      Monitor health, push firmware, handle incidents
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="flex justify-center pb-8">
+                    <Button variant="outline" className="rounded-full group">
+                      Enter Portal
+                      <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                    </Button>
+                  </CardContent>
+                </Card>
+              </Link>
 
               {/* Driver Card */}
-              <Card className="card-hover cursor-pointer overflow-hidden" onClick={() => navigateToDashboard("driver")}>
-                <div className="h-3 bg-success w-full"></div>
-                <CardHeader className="pt-8">
-                  <div className="mb-4 flex items-center justify-center">
-                    <div className="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center">
-                      <span className="text-3xl">🚗</span>
+              <Link href="/dashboard?persona=driver" passHref className="block">
+                <Card className="card-hover cursor-pointer overflow-hidden h-full">
+                  <div className="h-3 bg-success w-full"></div>
+                  <CardHeader className="pt-8">
+                    <div className="mb-4 flex items-center justify-center">
+                      <div className="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center">
+                        <span className="text-3xl">🚗</span>
+                      </div>
                     </div>
-                  </div>
-                  <CardTitle className="text-center text-2xl">Driver View</CardTitle>
-                  <CardDescription className="text-center">Start charging, view rates, track sessions</CardDescription>
-                </CardHeader>
-                <CardContent className="flex justify-center pb-8">
-                  <Button
-                    variant="outline"
-                    className="rounded-full group"
-                    onClick={() => navigateToDashboard("driver")}
-                  >
-                    Enter Portal
-                    <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-                  </Button>
-                </CardContent>
-              </Card>
+                    <CardTitle className="text-center text-2xl">Driver View</CardTitle>
+                    <CardDescription className="text-center">
+                      Start charging, view rates, track sessions
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="flex justify-center pb-8">
+                    <Button variant="outline" className="rounded-full group">
+                      Enter Portal
+                      <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                    </Button>
+                  </CardContent>
+                </Card>
+              </Link>
             </div>
           </div>
         </section>

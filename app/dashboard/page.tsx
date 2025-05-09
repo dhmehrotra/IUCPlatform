@@ -18,7 +18,6 @@ export default function DashboardPage() {
   }, [router, searchParams])
 
   // This component doesn't render anything itself
-  // It just redirects to the home page if needed
   // The actual dashboard content is rendered in the main page.tsx
   return null
 }

@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { useSearchParams, useRouter } from "next/navigation"
+import { useSearchParams, useRouter, usePathname } from "next/navigation"
 import { TopNavbar } from "@/components/top-navbar"
 import { Sidebar } from "@/components/sidebar"
 import { Footer } from "@/components/footer"
@@ -34,6 +34,7 @@ export type SidebarItem =
 
 export default function Home() {
   const searchParams = useSearchParams()
+  const pathname = usePathname()
   const router = useRouter()
   const [isHomePage, setIsHomePage] = useState(true)
   const [role, setRole] = useState<UserRole>("client-admin")
@@ -43,8 +44,7 @@ export default function Home() {
 
   // Check if we're on the dashboard page
   useEffect(() => {
-    const path = window.location.pathname
-    const isDashboard = path === "/dashboard"
+    const isDashboard = pathname === "/dashboard"
     setIsHomePage(!isDashboard)
 
     // Get persona from query params if on dashboard
@@ -61,7 +61,7 @@ export default function Home() {
         }
       }
     }
-  }, [searchParams])
+  }, [pathname, searchParams])
 
   // Update active item when role changes
   const handleRoleChange = (newRole: UserRole) => {
