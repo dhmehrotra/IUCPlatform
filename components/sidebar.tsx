@@ -1,6 +1,6 @@
 "use client"
 
-import type { SidebarItem, UserRole } from "@/app/page"
+import type { SidebarItem, UserRole } from "@/types"
 import {
   BarChart3,
   Settings,
