@@ -37,11 +37,11 @@ export function TopNavbar({ role, onRoleChange }: TopNavbarProps) {
       <div className="flex h-16 items-center justify-between px-6">
         <div className="flex items-center">
           <Image
-            src="/images/iuc-logo-blue.png"
+            src="/images/iuc-logo.png"
             alt="IUC Platform Logo"
             width={180}
             height={50}
-            className="h-10 w-auto"
+            className="h-10 w-auto animate-float"
             priority
           />
         </div>
