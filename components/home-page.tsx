@@ -1,21 +1,14 @@
 "use client"
 
-import { useRouter } from "next/navigation"
-import Image from "next/image"
 import Link from "next/link"
+import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { ArrowRight, Settings, BarChart3, Zap, Leaf } from "lucide-react"
 import { useRef } from "react"
 
 export function HomePage() {
-  const router = useRouter()
   const personaSectionRef = useRef<HTMLDivElement>(null)
-
-  const navigateToDashboard = (persona: string) => {
-    // Use window.location.href to ensure a full page navigation
-    window.location.href = `/dashboard?persona=${persona}`
-  }
 
   const scrollToPersonaSection = () => {
     personaSectionRef.current?.scrollIntoView({ behavior: "smooth" })
@@ -54,21 +47,27 @@ export function HomePage() {
               Monetize.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="/dashboard?persona=client-admin" passHref>
-                <Button size="lg" className="rounded-xl text-lg h-14 px-8 shadow-md hover:shadow-xl transition-all">
-                  🔐 Enter as Client Admin
-                </Button>
-              </Link>
-              <Link href="/dashboard?persona=iuc-ops" passHref>
-                <Button size="lg" className="rounded-xl text-lg h-14 px-8 shadow-md hover:shadow-xl transition-all">
-                  🛠 Enter as IUC Ops
-                </Button>
-              </Link>
-              <Link href="/dashboard?persona=driver" passHref>
-                <Button size="lg" className="rounded-xl text-lg h-14 px-8 shadow-md hover:shadow-xl transition-all">
-                  🚗 Enter as Driver
-                </Button>
-              </Link>
+              <Button
+                size="lg"
+                className="rounded-xl text-lg h-14 px-8 shadow-md hover:shadow-xl transition-all"
+                asChild
+              >
+                <Link href="/dashboard?persona=client-admin">🔐 Enter as Client Admin</Link>
+              </Button>
+              <Button
+                size="lg"
+                className="rounded-xl text-lg h-14 px-8 shadow-md hover:shadow-xl transition-all"
+                asChild
+              >
+                <Link href="/dashboard?persona=iuc-ops">🛠 Enter as IUC Ops</Link>
+              </Button>
+              <Button
+                size="lg"
+                className="rounded-xl text-lg h-14 px-8 shadow-md hover:shadow-xl transition-all"
+                asChild
+              >
+                <Link href="/dashboard?persona=driver">🚗 Enter as Driver</Link>
+              </Button>
             </div>
           </div>
         </section>
@@ -147,76 +146,74 @@ export function HomePage() {
             <h2 className="text-3xl font-bold text-center mb-12">Choose How You'd Like to Enter</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {/* Client Admin Card */}
-              <Link href="/dashboard?persona=client-admin" passHref className="block">
-                <Card className="card-hover cursor-pointer overflow-hidden h-full">
-                  <div className="h-3 bg-primary w-full"></div>
-                  <CardHeader className="pt-8">
-                    <div className="mb-4 flex items-center justify-center">
-                      <div className="w-16 h-16 rounded-full bg-blue-100 flex items-center justify-center">
-                        <span className="text-3xl">🏢</span>
-                      </div>
+              <Card className="card-hover overflow-hidden h-full">
+                <div className="h-3 bg-primary w-full"></div>
+                <CardHeader className="pt-8">
+                  <div className="mb-4 flex items-center justify-center">
+                    <div className="w-16 h-16 rounded-full bg-blue-100 flex items-center justify-center">
+                      <span className="text-3xl">🏢</span>
                     </div>
-                    <CardTitle className="text-center text-2xl">Client Admin Portal</CardTitle>
-                    <CardDescription className="text-center">
-                      View usage, manage pricing, download reports
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent className="flex justify-center pb-8">
-                    <Button variant="outline" className="rounded-full group">
+                  </div>
+                  <CardTitle className="text-center text-2xl">Client Admin Portal</CardTitle>
+                  <CardDescription className="text-center">
+                    View usage, manage pricing, download reports
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="flex justify-center pb-8">
+                  <Button variant="outline" className="rounded-full group" asChild>
+                    <Link href="/dashboard?persona=client-admin">
                       Enter Portal
                       <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-                    </Button>
-                  </CardContent>
-                </Card>
-              </Link>
+                    </Link>
+                  </Button>
+                </CardContent>
+              </Card>
 
               {/* IUC Ops Card */}
-              <Link href="/dashboard?persona=iuc-ops" passHref className="block">
-                <Card className="card-hover cursor-pointer overflow-hidden h-full">
-                  <div className="h-3 bg-warning w-full"></div>
-                  <CardHeader className="pt-8">
-                    <div className="mb-4 flex items-center justify-center">
-                      <div className="w-16 h-16 rounded-full bg-amber-100 flex items-center justify-center">
-                        <span className="text-3xl">🛠</span>
-                      </div>
+              <Card className="card-hover overflow-hidden h-full">
+                <div className="h-3 bg-warning w-full"></div>
+                <CardHeader className="pt-8">
+                  <div className="mb-4 flex items-center justify-center">
+                    <div className="w-16 h-16 rounded-full bg-amber-100 flex items-center justify-center">
+                      <span className="text-3xl">🛠</span>
                     </div>
-                    <CardTitle className="text-center text-2xl">IUC Ops Portal</CardTitle>
-                    <CardDescription className="text-center">
-                      Monitor health, push firmware, handle incidents
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent className="flex justify-center pb-8">
-                    <Button variant="outline" className="rounded-full group">
+                  </div>
+                  <CardTitle className="text-center text-2xl">IUC Ops Portal</CardTitle>
+                  <CardDescription className="text-center">
+                    Monitor health, push firmware, handle incidents
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="flex justify-center pb-8">
+                  <Button variant="outline" className="rounded-full group" asChild>
+                    <Link href="/dashboard?persona=iuc-ops">
                       Enter Portal
                       <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-                    </Button>
-                  </CardContent>
-                </Card>
-              </Link>
+                    </Link>
+                  </Button>
+                </CardContent>
+              </Card>
 
               {/* Driver Card */}
-              <Link href="/dashboard?persona=driver" passHref className="block">
-                <Card className="card-hover cursor-pointer overflow-hidden h-full">
-                  <div className="h-3 bg-success w-full"></div>
-                  <CardHeader className="pt-8">
-                    <div className="mb-4 flex items-center justify-center">
-                      <div className="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center">
-                        <span className="text-3xl">🚗</span>
-                      </div>
+              <Card className="card-hover overflow-hidden h-full">
+                <div className="h-3 bg-success w-full"></div>
+                <CardHeader className="pt-8">
+                  <div className="mb-4 flex items-center justify-center">
+                    <div className="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center">
+                      <span className="text-3xl">🚗</span>
                     </div>
-                    <CardTitle className="text-center text-2xl">Driver View</CardTitle>
-                    <CardDescription className="text-center">
-                      Start charging, view rates, track sessions
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent className="flex justify-center pb-8">
-                    <Button variant="outline" className="rounded-full group">
+                  </div>
+                  <CardTitle className="text-center text-2xl">Driver View</CardTitle>
+                  <CardDescription className="text-center">Start charging, view rates, track sessions</CardDescription>
+                </CardHeader>
+                <CardContent className="flex justify-center pb-8">
+                  <Button variant="outline" className="rounded-full group" asChild>
+                    <Link href="/dashboard?persona=driver">
                       Enter Portal
                       <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-                    </Button>
-                  </CardContent>
-                </Card>
-              </Link>
+                    </Link>
+                  </Button>
+                </CardContent>
+              </Card>
             </div>
           </div>
         </section>

@@ -36,18 +36,15 @@ export default function Home() {
   const searchParams = useSearchParams()
   const pathname = usePathname()
   const router = useRouter()
-  const [isHomePage, setIsHomePage] = useState(true)
   const [role, setRole] = useState<UserRole>("client-admin")
   const [activeItem, setActiveItem] = useState<SidebarItem>(
     role === "client-admin" ? "dashboard" : role === "iuc-ops" ? "network-monitor" : "driver-interface",
   )
 
-  // Check if we're on the dashboard page
+  // Check if we're on the dashboard page and get the persona
   useEffect(() => {
     const isDashboard = pathname === "/dashboard"
-    setIsHomePage(!isDashboard)
 
-    // Get persona from query params if on dashboard
     if (isDashboard) {
       const persona = searchParams.get("persona") as UserRole
       if (persona && ["client-admin", "iuc-ops", "driver"].includes(persona)) {
@@ -76,7 +73,7 @@ export default function Home() {
   }
 
   // If we're on the home page, render the HomePage component
-  if (isHomePage) {
+  if (pathname === "/") {
     return <HomePage />
   }
 
