@@ -1,9 +1,11 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import { useSearchParams, useRouter } from "next/navigation"
 import { TopNavbar } from "@/components/top-navbar"
 import { Sidebar } from "@/components/sidebar"
 import { Footer } from "@/components/footer"
+import { HomePage } from "@/components/home-page"
 import { ClientAdminDashboard } from "@/components/client-admin/dashboard"
 import { ClientAdminStations } from "@/components/client-admin/stations"
 import { ClientAdminUsers } from "@/components/client-admin/users"
@@ -31,10 +33,35 @@ export type SidebarItem =
   | "driver-interface"
 
 export default function Home() {
+  const searchParams = useSearchParams()
+  const router = useRouter()
+  const [isHomePage, setIsHomePage] = useState(true)
   const [role, setRole] = useState<UserRole>("client-admin")
   const [activeItem, setActiveItem] = useState<SidebarItem>(
     role === "client-admin" ? "dashboard" : role === "iuc-ops" ? "network-monitor" : "driver-interface",
   )
+
+  // Check if we're on the dashboard page
+  useEffect(() => {
+    const path = window.location.pathname
+    const isDashboard = path === "/dashboard"
+    setIsHomePage(!isDashboard)
+
+    // Get persona from query params if on dashboard
+    if (isDashboard) {
+      const persona = searchParams.get("persona") as UserRole
+      if (persona && ["client-admin", "iuc-ops", "driver"].includes(persona)) {
+        setRole(persona)
+        if (persona === "client-admin") {
+          setActiveItem("dashboard")
+        } else if (persona === "iuc-ops") {
+          setActiveItem("network-monitor")
+        } else {
+          setActiveItem("driver-interface")
+        }
+      }
+    }
+  }, [searchParams])
 
   // Update active item when role changes
   const handleRoleChange = (newRole: UserRole) => {
@@ -48,6 +75,12 @@ export default function Home() {
     }
   }
 
+  // If we're on the home page, render the HomePage component
+  if (isHomePage) {
+    return <HomePage />
+  }
+
+  // Otherwise, render the dashboard
   return (
     <div className="flex h-screen flex-col">
       <TopNavbar role={role} onRoleChange={handleRoleChange} />
