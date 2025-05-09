@@ -33,7 +33,7 @@ export function ClientAdminPartners() {
       id: 4,
       name: "Stratus Unlimited",
       description: "Stall wraps and branding",
-      logo: "/placeholder.svg?height=60&width=120&query=Stratus+Unlimited+logo",
+      logo: "/stratus-unlimited-logo.png",
       category: "Branding",
       website: "https://www.stratusunlimited.com",
     },
@@ -41,7 +41,7 @@ export function ClientAdminPartners() {
       id: 5,
       name: "Travelstead",
       description: "Warehousing and logistics",
-      logo: "/placeholder.svg?height=60&width=120&query=Travelstead+logo",
+      logo: "/travelstead-logo.png",
       category: "Logistics",
       website: "https://www.travelstead.com",
     },
@@ -49,7 +49,7 @@ export function ClientAdminPartners() {
       id: 6,
       name: "Putti",
       description: "Web and mobile software partner",
-      logo: "/placeholder.svg?height=60&width=120&query=Putti+logo",
+      logo: "/putti-logo.png",
       category: "Software",
       website: "https://www.putti.co.nz",
     },
@@ -103,8 +103,8 @@ export function ClientAdminPartners() {
         <CardContent>
           <div className="aspect-video rounded-lg overflow-hidden bg-gray-100">
             <img
-              src="/placeholder.svg?height=400&width=800&query=US+coverage+map"
-              alt="Partner coverage map of the United States"
+              src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Screenshot%202025-05-09%203.45.27%20AM-xp15exZ29MSTvh7mpBlcylxYsif3Ck.png"
+              alt="Partner coverage map showing locations across the United States and Canada"
               className="w-full h-full object-cover"
             />
           </div>
